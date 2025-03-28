@@ -1,12 +1,6 @@
 const router = require('express').Router();
-const Chapters = require('../database/models/chapter.model');
+const tweets = require('./api.tweets');
 
-router.get('/users', (req, res) => {
-    Chapters.findOne({}).then(doc => {
-        console.log(doc);
-        res.json(doc);
-    })
-    
-});
+router.use('/tweets', tweets);
 
 module.exports = router;
