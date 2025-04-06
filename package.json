@@ -4,13 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "env-cmd -f config/.env nodemon app.js",
+    "start": "env-cmd -f config/.env NODE_ENV=development nodemon app.js",
+    "start:prod": "NODE_ENV=production nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "env-cmd": "^10.1.0",
+    "errorhandler": "^1.5.1",
     "express": "^4.21.2",
     "mongoose": "^8.12.2",
     "morgan": "^1.10.0",

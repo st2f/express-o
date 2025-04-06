@@ -1,11 +1,11 @@
-navbar(class="navbar navbar-expand-lg navbar-light bg-light")
-  a(class="navbar-brand" href="#")
+nav(class="navbar navbar-expand-lg navbar-light bg-light")
+  a(class="navbar-brand" href="/tweets")
     img(width="30" height="30" src="/images/media.png")
-  button(class="navbar-toggler")
+  button(class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
     span(class="navbar-toggler-icon")
-  div(class="collapse navbar-collapse")
+  div#navbarSupportedContent(class="collapse navbar-collapse")
     ul(class="navbar-nav ms-auto")
       li(class="nav-item active")
-        a(class="btn btn-primary btn-tweet me-3" href="/tweet/new") express-o
+        a(class="btn btn-primary btn-tweet me-3" href="/tweets/new") New
       li(class="nav-item")
         a(class="nav-link" href="#") Connexion 
