@@ -20,3 +20,7 @@ exports.getTweet = (tweetId) => {
 exports.updateTweet = (tweetId, tweet) => {
   return Tweet.findByIdAndUpdate(tweetId, { $set: tweet }, { runValidators: true });
 }
+
+exports.updateTweet = (tweetId, tweet) => {
+  return Tweet.findByIdAndUpdate(tweetId, { $set: tweet }, { runValidators: true });
+}
