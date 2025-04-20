@@ -3,10 +3,13 @@ const morgan = require('morgan');
 const path = require('path');
 const index = require('./routes');
 const errorHandler = require('errorhandler');
+const util = require('util');
+
 require('./database');
 
 const app = express();
 exports.app = app;
+
 
 const port = process.env.PORT || 3000;
 
