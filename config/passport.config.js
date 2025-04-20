@@ -6,19 +6,22 @@ const { findUserPerEmail, findUserPerId } = require('../queries/users.queries');
 app.use(passport.initialize());
 app.use(passport.session());
 
+// after authentication, store _id in session
 passport.serializeUser((user, done) => {
   done(null, user._id);
 })
 
+// in each request, express-session check the session _id in cookie & execute this
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await findUserPerId(id);
-    done(null, user)
+    done(null, user); // user is now available in req.user
   } catch(e) {
     done(e);
   }
 })
 
+// strategy to authenticate
 passport.use('local', new LocalStrategy({
   usernameField: 'email'
 }, async (email, password, done) => {
