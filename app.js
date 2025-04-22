@@ -8,10 +8,7 @@ const util = require('util');
 require('./database');
 
 const app = express();
-exports.app = app;
-
-
-const port = process.env.PORT || 3000;
+module.exports = app;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -37,4 +34,3 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-app.listen(port);
