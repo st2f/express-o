@@ -1,0 +1,30 @@
+
+services:
+
+  node_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.dev
+    container_name: node_app
+    restart: unless-stopped
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - website3
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.node_app.tls=true
+      - traefik.http.routers.node_app.rule=Host(`${NODE_HOST}`) || Host(`${NODE_HOST_WWW}`)
+      - traefik.http.routers.node_app.entrypoints=websecure
+      - traefik.http.services.node_app.loadbalancer.server.port=3000
+      # Redirect www to non-www
+      - traefik.http.middlewares.node_www_redirect.redirectregex.regex=^https://www\.(.*)
+      - traefik.http.middlewares.node_www_redirect.redirectregex.replacement=https://$${1}
+      - traefik.http.routers.node_app.middlewares=node_www_redirect
+
+networks:
+  website3:
+    name: "proxy"
+    external: true

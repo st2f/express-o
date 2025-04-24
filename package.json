@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "env-cmd -f config/.env.dev nodemon ./bin/www",
-    "start:prod": "env-cmd -f config/.env nodemon ./bin/www",
+    "start": "env-cmd -f .env.dev nodemon ./bin/www",
+    "start:prod": "env-cmd -f .env nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

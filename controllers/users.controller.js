@@ -1,6 +1,9 @@
-const { createUser } = require('../queries/users.queries');
+const { createUser, findUserPerUsername, searchUsersPerUsername, addUserIdToCurrentUserFollowing, findUserPerId, removeUserIdToCurrentUserFollowing } = require('../queries/users.queries');
+const { getUserTweetsFormAuthorId } = require('../queries/tweets.queries');
 const path = require('path');
 const multer = require('multer');
+const util = require('util');
+
 const upload = multer({ storage: multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join( __dirname, '../public/images/avatars'))
@@ -8,10 +11,34 @@ const upload = multer({ storage: multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, `${ Date.now() }-${ file.originalname }`);
   }
-}) });
+}) })
 
-const util = require('util');
+exports.userList = async (req, res, next) => {
+  try {
+    const search = req.query.search;
+    const users = await searchUsersPerUsername(search);
+    res.render('includes/search-menu', { users });
+  } catch(e) {
+    next(e);
+  }
+}
 
+exports.userProfile = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const user = await findUserPerUsername(username);
+    const tweets = await getUserTweetsFormAuthorId(user._id);
+    res.render('tweets/tweet', { 
+      tweets, 
+      isAuthenticated: req.isAuthenticated(), 
+      currentUser: req.user, 
+      user, 
+      editable: false 
+    });
+  } catch(e) {
+    next(e);
+  }
+}
 
 exports.signupForm = (req, res, next) => {
   res.render('users/user-form', { errors: null, isAuthenticated: req.isAuthenticated(), currentUser: req.user });
@@ -29,24 +56,53 @@ exports.signup = async (req, res, next) => {
 
 exports.uploadImage = [ 
   upload.single('avatar'),
+  
   async (req, res, next) => {
-    // console.log(
-    //   util.inspect(req, {
-    //     compact: false,
-    //     depth: 5,
-    //     breakLength: 80,
-    //     color: true,
-    //   })
-    // );
-    //res.end();
+  //   console.log(
+  //     util.inspect(req.body, {
+  //       compact: false,
+  //       depth: 5,
+  //       breakLength: 80,
+  //       color: true,
+  //     })
+  //   );
+  //   console.log(
+  //     util.inspect(req.files, {
+  //       compact: false,
+  //       depth: 5,
+  //       breakLength: 80,
+  //       color: true,
+  //     })
+  //   );
+  //   res.end();
+  
     try {
       const user = req.user;
       user.avatar = `/images/avatars/${ req.file.filename }`;
-      console.log(user);
       await user.save();
       res.redirect('/');
     } catch(e) {
       next(e);
-    }
+    } 
   }
 ]
+
+exports.followUser = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const [, user] = await Promise.all([ addUserIdToCurrentUserFollowing(req.user, userId), findUserPerId(userId)]);
+    res.redirect(`/users/${ user.username }`);
+  } catch(e) {
+    next(e);
+  }
+}
+
+exports.unFollowUser = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const [, user] = await Promise.all([ removeUserIdToCurrentUserFollowing(req.user, userId), findUserPerId(userId)]);
+    res.redirect(`/users/${ user.username }`);
+  } catch(e) {
+    next(e);
+  }
+}
