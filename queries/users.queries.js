@@ -29,9 +29,8 @@ exports.findUserPerUsername = (username) => {
 };
 
 exports.searchUsersPerUsername = (search) => {
-  const regExp = `^${search}`;
-  const reg = new RegExp(regExp);
-  return User.find({ username: { $regex: reg } })
+  search.replace(new RegExp('[^a-zA-Z0-9_]', 'g'), '');
+  return User.find({ username: { $regex: search } })
     .limit(10)
     .exec();
 };

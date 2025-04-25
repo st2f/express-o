@@ -3,7 +3,7 @@ module.exports = {
     name: 'express-o',
     script: './bin/www',
     node_args: "--env-file ./.env.dev",
-    instances: '2',
+    instances: 1,
     autorestart: true,
     watch: true,
     env: {

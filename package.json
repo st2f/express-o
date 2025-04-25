@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "private": true,
   "scripts": {
     "start": "env-cmd -f .env.dev nodemon ./bin/www",
     "start:prod": "env-cmd -f .env nodemon ./bin/www",
